@@ -2,21 +2,14 @@ const Spot = require('./../models/Spot')
 const Booking = require('./../models/Booking')
 module.exports = {
     async store(req, res) {
-        const {filename} = req.file
-        const {company, techs, price} = req.body
+        const {spot_id} = req.params
+        const {date} = req.body
         const {user_id} = req.headers
-        spot = await Spot.create({
+        const booking = await Booking.create({
             user: user_id,
-            company,
-            price,
-            thumbnail: filename,
-            techs: techs.split(',').map(tech => tech.trim())
+            spot: spot_id,
+            date
         })
-        return res.json(spot)
-    },
-    async index(req, res) {
-        const { tech } =  req.query
-        const spots = await Spot.find({techs: tech})
-        return res.json(spots)
+        return res.json(booking)
     }
 }
